@@ -1,11 +1,12 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { TiltCard } from "@/components/tilt-card";
 import { formatBRL, type Product } from "@/data/products";
 import { whatsappLink } from "@/lib/whatsapp";
 
 export function ProductCard({ product }: { product: Product }) {
   return (
-    <div className="group flex flex-col overflow-hidden rounded-lg border border-line bg-surface transition-colors hover:border-line-strong">
+    <TiltCard className="group flex flex-col overflow-hidden rounded-lg border border-line bg-surface transition-colors hover:border-line-strong">
       <div className="relative aspect-[4/3] overflow-hidden bg-surface-2">
         <Image
           src={product.image}
@@ -48,6 +49,6 @@ export function ProductCard({ product }: { product: Product }) {
           </Button>
         </div>
       </div>
-    </div>
+    </TiltCard>
   );
 }
