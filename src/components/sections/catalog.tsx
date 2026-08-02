@@ -6,7 +6,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { SinucaConfigurator } from "@/components/sinuca-configurator";
 import { ProductCard } from "@/components/product-card";
-import { pingPong } from "@/data/products";
+import { Button } from "@/components/ui/button";
+import { otherTables } from "@/data/products";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -41,8 +42,8 @@ export function Catalog() {
             Monte a sua mesa
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Escolha o tamanho — cada medida tem seu valor — e a cor do
-            tecido, sem alterar o preço.
+            Escolha o tamanho — cada medida tem seu valor — o tampo e a cor
+            do tecido, sem alterar o preço.
           </p>
         </div>
 
@@ -51,9 +52,17 @@ export function Catalog() {
         </div>
 
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="catalog-reveal">
-            <ProductCard product={pingPong} />
-          </div>
+          {otherTables.map((product) => (
+            <div key={product.slug} className="catalog-reveal">
+              <ProductCard product={product} />
+            </div>
+          ))}
+        </div>
+
+        <div className="catalog-reveal mt-10 text-center">
+          <Button asChild variant="outline">
+            <a href="/catalogo">Ver catálogo completo</a>
+          </Button>
         </div>
       </div>
     </section>

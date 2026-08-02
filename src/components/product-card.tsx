@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TiltCard } from "@/components/tilt-card";
 import { formatBRL, type Product } from "@/data/products";
@@ -8,13 +9,19 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <TiltCard className="group flex flex-col overflow-hidden rounded-lg border border-line bg-surface transition-colors hover:border-line-strong">
       <div className="relative aspect-[4/3] overflow-hidden bg-surface-2">
-        <Image
-          src={product.image}
-          alt={product.name}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-          sizes="(min-width: 768px) 25vw, 100vw"
-        />
+        {product.image ? (
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(min-width: 768px) 25vw, 100vw"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <Package className="h-10 w-10 text-line-strong" />
+          </div>
+        )}
         <span className="absolute left-3 top-3 rounded-md bg-background/90 px-2 py-1 font-mono text-[11px] tracking-wide text-foreground">
           {product.dims}
         </span>

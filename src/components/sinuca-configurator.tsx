@@ -9,11 +9,19 @@ import { sinucaColors, sinucaSizes, formatBRL } from "@/data/products";
 import { whatsappLink } from "@/lib/whatsapp";
 
 export function SinucaConfigurator() {
-  const [sizeIndex, setSizeIndex] = useState(1);
+  const [sizeIndex, setSizeIndex] = useState(2);
+  const [materialIndex, setMaterialIndex] = useState(0);
   const [colorIndex, setColorIndex] = useState(0);
 
   const size = sinucaSizes[sizeIndex];
+  const material =
+    size.materials[materialIndex] ?? size.materials[0];
   const color = sinucaColors[colorIndex];
+
+  function selectSize(i: number) {
+    setSizeIndex(i);
+    setMaterialIndex(0);
+  }
 
   return (
     <div className="grid gap-10 rounded-lg border border-line bg-surface p-6 md:grid-cols-2 md:p-10">
@@ -58,7 +66,7 @@ export function SinucaConfigurator() {
             {sinucaSizes.map((s, i) => (
               <button
                 key={s.slug}
-                onClick={() => setSizeIndex(i)}
+                onClick={() => selectSize(i)}
                 className={`rounded-md border px-3 py-2 text-sm transition-colors ${
                   i === sizeIndex
                     ? "border-accent bg-accent text-accent-foreground"
@@ -66,6 +74,27 @@ export function SinucaConfigurator() {
                 }`}
               >
                 {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-6">
+          <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+            Tampo
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {size.materials.map((m, i) => (
+              <button
+                key={m.name}
+                onClick={() => setMaterialIndex(i)}
+                className={`rounded-md border px-3 py-2 text-sm transition-colors ${
+                  i === materialIndex
+                    ? "border-accent bg-accent text-accent-foreground"
+                    : "border-line text-muted-foreground hover:border-line-strong hover:text-foreground"
+                }`}
+              >
+                {m.name}
               </button>
             ))}
           </div>
@@ -103,12 +132,12 @@ export function SinucaConfigurator() {
 
         <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-line pt-6">
           <span className="text-2xl font-medium text-foreground">
-            {formatBRL(size.priceCents)}
+            {formatBRL(material.priceCents)}
           </span>
           <Button asChild>
             <a
               href={whatsappLink(
-                `Olá, tenho interesse na Mesa de Sinuca ${size.label} (${size.dims}), tecido ${color.name}`
+                `Olá, tenho interesse na Mesa de Sinuca ${size.label} (${size.dims}), tampo ${material.name}, tecido ${color.name}`
               )}
               target="_blank"
               rel="noopener noreferrer"

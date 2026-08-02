@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
+import { FloatingWhatsapp } from "@/components/floating-whatsapp";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,6 +37,7 @@ export default function RootLayout({
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <SiteFooter />
+          <FloatingWhatsapp />
         </SmoothScroll>
       </body>
     </html>
