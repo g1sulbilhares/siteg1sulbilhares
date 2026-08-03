@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
 import { FloatingWhatsapp } from "@/components/floating-whatsapp";
+import { AuthHashRedirect } from "@/components/auth-hash-redirect";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,6 +34,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
+        <AuthHashRedirect />
         <SmoothScroll>
           <SiteHeader />
           <main className="flex-1">{children}</main>
