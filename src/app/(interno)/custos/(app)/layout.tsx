@@ -12,8 +12,8 @@ export const dynamic = "force-dynamic";
 const NAV = [
   { href: "/custos", label: "Dashboard" },
   { href: "/custos/materia-prima", label: "Matéria-Prima" },
+  { href: "/custos/produtos", label: "Produtos" },
   // Próximas etapas do módulo — rotas ainda não implementadas:
-  // { href: "/custos/produtos", label: "Produtos" },
   // { href: "/custos/indiretos", label: "Custos Indiretos" },
   // { href: "/custos/simulador", label: "Simulador" },
 ];
