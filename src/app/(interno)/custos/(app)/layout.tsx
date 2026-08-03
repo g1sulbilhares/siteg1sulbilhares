@@ -3,6 +3,12 @@ import { requireTeamMember } from "@/server/costs/require-team-member";
 import { logout } from "../login/actions";
 import { Button } from "@/components/ui/button";
 
+// Todas as páginas deste grupo dependem de sessão (cookies) e consultam o
+// banco por usuário — nunca podem ser pré-renderizadas estaticamente no
+// build (o build da Vercel não tem acesso ao Postgres real). Forçar
+// renderização dinâmica aqui cobre todas as rotas filhas de uma vez.
+export const dynamic = "force-dynamic";
+
 const NAV = [
   { href: "/custos", label: "Dashboard" },
   { href: "/custos/materia-prima", label: "Matéria-Prima" },
