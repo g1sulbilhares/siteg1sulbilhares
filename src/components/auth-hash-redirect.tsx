@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 /**
  * Rede de segurança para os links de convite/recuperação de senha do
@@ -48,12 +47,18 @@ export function AuthHashRedirect() {
 
     if (!accessToken || !refreshToken) return;
 
-    const supabase = createSupabaseBrowserClient();
-
-    supabase.auth
-      .setSession({ access_token: accessToken, refresh_token: refreshToken })
-      .then(({ error }) => {
-        if (error) {
+    // Troca os tokens por uma sessão via `/auth/set-session` (server-side,
+    // grava o cookie por `Set-Cookie` de verdade) em vez de chamar
+    // `setSession()` direto no cliente — evita a corrida entre o cookie ser
+    // persistido e a navegação para a próxima tela começar (ver comentário
+    // detalhado em `src/app/auth/set-session/route.ts`).
+    fetch("/auth/set-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ access_token: accessToken, refresh_token: refreshToken }),
+    })
+      .then((res) => {
+        if (!res.ok) {
           window.location.replace("/custos/login?erro=link-invalido");
           return;
         }
@@ -63,6 +68,9 @@ export function AuthHashRedirect() {
             ? "/custos/definir-senha"
             : "/custos"
         );
+      })
+      .catch(() => {
+        window.location.replace("/custos/login?erro=link-invalido");
       });
   }, []);
 
