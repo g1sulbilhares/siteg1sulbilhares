@@ -10,15 +10,17 @@
 // Convenção: todo valor monetário é armazenado em centavos (Int), igual ao
 // `priceCents` que já existe em `src/data/products.ts`. Evita problemas de
 // arredondamento com float e mantém os dois lados do projeto consistentes.
+//
+// Prisma 7: a connection string NÃO fica mais aqui (ver prisma.config.ts
+// na raiz do projeto para o CLI, e src/lib/prisma.ts para o driver adapter
+// usado em runtime).
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
 }
 
 // ---------------------------------------------------------------------------
