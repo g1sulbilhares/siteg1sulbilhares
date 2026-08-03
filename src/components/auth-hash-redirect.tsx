@@ -40,7 +40,7 @@ export function AuthHashRedirect() {
 
     if (errorDescription) {
       window.location.replace(
-        `/custos/login?erro=link-invalido&detalhe=${encodeURIComponent(errorDescription)}`
+        `/custos/login?erro=link-invalido&motivo=hash-error-description&detalhe=${encodeURIComponent(errorDescription)}`
       );
       return;
     }
@@ -52,14 +52,24 @@ export function AuthHashRedirect() {
     // `setSession()` direto no cliente — evita a corrida entre o cookie ser
     // persistido e a navegação para a próxima tela começar (ver comentário
     // detalhado em `src/app/auth/set-session/route.ts`).
+    //
+    // TEMPORÁRIO (diagnóstico): os parâmetros `motivo`/`status`/`detalhe`
+    // anexados abaixo em cada caminho de falha não mudam o comportamento
+    // pro usuário (a mensagem de erro na tela de login continua igual) —
+    // servem só pra eu conseguir ver, pela URL que a pessoa reporta, em
+    // qual ponto exato o fluxo quebrou. Remover depois de identificar a
+    // causa raiz do "link inválido" que persiste mesmo com token válido.
     fetch("/auth/set-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ access_token: accessToken, refresh_token: refreshToken }),
     })
-      .then((res) => {
+      .then(async (res) => {
         if (!res.ok) {
-          window.location.replace("/custos/login?erro=link-invalido");
+          const body = await res.text().catch(() => "");
+          window.location.replace(
+            `/custos/login?erro=link-invalido&motivo=set-session-failed&status=${res.status}&detalhe=${encodeURIComponent(body.slice(0, 200))}`
+          );
           return;
         }
 
@@ -69,8 +79,10 @@ export function AuthHashRedirect() {
             : "/custos"
         );
       })
-      .catch(() => {
-        window.location.replace("/custos/login?erro=link-invalido");
+      .catch((err) => {
+        window.location.replace(
+          `/custos/login?erro=link-invalido&motivo=fetch-exception&detalhe=${encodeURIComponent(String(err?.message || err).slice(0, 200))}`
+        );
       });
   }, []);
 
